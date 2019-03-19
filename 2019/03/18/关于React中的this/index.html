@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Yukiniro">
 <meta property="og:description" content="###组件中的this  在React组件内部很容易理解为访问的是组件实例，但是实际上却是不一定的。  12345678910class Button extends Component &amp;#123;  render() &amp;#123;      console.log(this);      return &amp;lt;button onClick=&amp;#123;this.handleClick&amp;#125">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-18T14:41:21.380Z">
+<meta property="og:updated_time" content="2019-03-19T14:11:13.853Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于React中的this">
 <meta name="twitter:description" content="###组件中的this  在React组件内部很容易理解为访问的是组件实例，但是实际上却是不一定的。  12345678910class Button extends Component &amp;#123;  render() &amp;#123;      console.log(this);      return &amp;lt;button onClick=&amp;#123;this.handleClick&amp;#125">
@@ -103,7 +103,7 @@
 </li>
 <li><p>JSX中绑定</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;button onClick=&#123;<span class="keyword">this</span>.handleClick.bind(<span class="keyword">this</span>)&#125;&gt;button&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">&lt;button onClick=&#123;(e) =&gt; &#123;this.handleClick(e)&#125;&#125;&gt;button&lt;/</span>button&gt;</span><br></pre></td></tr></table></figure>
-<p>这两种方法会有效率问题，第一个不清楚是怎样的问题，第二个会在每次渲染时创建<br>新的函数进行传递，如果是原生标签问题不大，但如果是组件标签会造成此组件不必要<br>的渲染。</p>
+<p>这两种方法会有效率问题，在每次渲染时创建新的函数进行传递，如果是原生标签问题不大，但如果是组件标签会造成此组件不必要<br>的渲染。</p>
 </li>
 <li><p>箭头函数</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">handleClick = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -114,7 +114,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/18/关于React中的this/" data-id="cjtego8tf000064cqbc5gc3r3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/18/关于React中的this/" data-id="cjtfuwjju0000oscqx3yjeerc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
