@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-03-19T14:11:13.853Z</updated>
+  <updated>2019-03-19T15:34:13.929Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>React中的合成事件（SyntheticEvent）</title>
+    <link href="http://yoursite.com/2019/03/19/React%E4%B8%AD%E7%9A%84%E5%90%88%E6%88%90%E4%BA%8B%E4%BB%B6%EF%BC%88SyntheticEvent%EF%BC%89/"/>
+    <id>http://yoursite.com/2019/03/19/React中的合成事件（SyntheticEvent）/</id>
+    <published>2019-03-19T14:38:56.000Z</published>
+    <updated>2019-03-19T15:34:13.929Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EventTest</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> &lt;button onClick=&#123;this.childClick&#125;&gt;child&lt;/button&gt;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    childClick = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(e.target);</span><br><span class="line">        setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;<span class="built_in">console</span>.log(e.target)&#125;, <span class="number">0</span>);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'child click'</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>如上图所示，在<code>React</code>中一般绑定事件都会在JSX中进行。出于对性能的考虑，<br>React会创建一个合成事件<code>SyntheticEvent</code>，也就是说，<code>this.childClick</code>，<br>方法并不会绑定在<code>button</code>上而是会绑定在<code>document</code>上进行统一处理，并且在此<br>基础上会将此事件放在事件池中，也就是说此事件对象有可能被重用，所有在事件回调<br>完成后，事件对象上的所有属性都会失效。</p><ul><li><p>事件的异步访问</p><p><img src="../images/console1.PNG" alt><br>上述代码在点击<code>button</code>后会有以上输出信息，之前说过，合成事件在异步访问时<br>其属性都会失效，并且会弹出类型警告。如果确实需要在异步中作处理，可以调用<br><code>event.persist()</code>方法将此事件从池中移除，使用户代码保留对此事件对象的<br>引用。另外还可以在异步前将需要的事件属性保留下来然后在异步中使用。</p></li><li><p>原生事件</p><p><code>React</code>的合成事件几乎涵盖了所有的原生事件，但是也存在不得不使用原生事件<br>的业务逻辑。<br><br>所有就需要通过<code>ref</code>获取真实的DOM，然后在<code>componentDidMount</code>中进行事件<br>绑定（<code>addEventListener</code>）,不过要记得在<code>componentWillUnmount</code>中移除<br>（<code>removeEventListener</code>）绑定的事件,因为过多的事件监听会影响效率。</p></li><li><p>合成事件与原生事件的混用</p><p>原生事件绑定在DOM上，合成事件绑定在<code>document</code>上，所以它们在执行顺序上会<br>有所差异。</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EventTest</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    componentDidMount() &#123;</span><br><span class="line">        <span class="keyword">this</span>.parent.addEventListener(<span class="string">'click'</span>, <span class="keyword">this</span>.parentClick)</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;div ref=&#123;ele =&gt; <span class="keyword">this</span>.parent = ele&#125;&gt;</span><br><span class="line">                parent</span><br><span class="line">                &lt;button onClick=&#123;<span class="keyword">this</span>.childClick&#125;&gt;child&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">            &lt;/</span>div&gt;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">    childClick = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'child click'</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">    parentClick = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'parent click'</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>上述代码会先输出<code>parent click</code>然后输出<code>child click</code>,如果在<code>childClick</code><br>回调中阻止冒泡，输出结果不变; 如果在<code>parentClick</code>回调中阻止冒泡便只会输出<br><code>parent click</code>。</p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span 
+      
+    
+    </summary>
+    
+    
+      <category term="React" scheme="http://yoursite.com/tags/React/"/>
+    
+  </entry>
   
   <entry>
     <title>关于React中的this</title>
