@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2019/03/21/%E5%85%B3%E4%BA%8Evar%E3%80%81let%E5%8F%8Aconst/</loc>
+    
+    <lastmod>2019-03-21T15:16:35.804Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2019/03/19/React%E4%B8%AD%E7%9A%84%E5%90%88%E6%88%90%E4%BA%8B%E4%BB%B6%EF%BC%88SyntheticEvent%EF%BC%89/</loc>
     
     <lastmod>2019-03-19T15:34:13.929Z</lastmod>

@@ -66,6 +66,64 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-关于var、let及const" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/21/关于var、let及const/" class="article-date">
+  <time datetime="2019-03-21T14:26:10.000Z" itemprop="datePublished">2019-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/21/关于var、let及const/">关于var、let及const</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><code>var</code> <code>let</code> 以及 <code>const</code>的作用都是用来声明变量的，不过其应用场景和副作用都<br>有所不同。</p>
+<ul>
+<li>作用域<br><br><br><code>var</code>声明的变量的作用域是当前执行上下文，比如全局作用域或者函数作用域，但是<br>没有块级作用域，并且在全局作用域声明的话会自动挂载到全局对象。而<code>let</code>与<code>const</code><br>不会挂载到全局对象，但是它们却有块级作用域<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="string">'a'</span>;</span><br><span class="line">    <span class="keyword">let</span> b = <span class="string">'b'</span>;</span><br><span class="line">    <span class="keyword">const</span> c = <span class="string">'c'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(a);</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="built_in">console</span>.log(c);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>上面代码中<code>a</code>可以正常输出，而<code>b</code>,<code>c</code>会报错，原因就是块级作用域的区别。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(i);</span><br><span class="line">    &#125;, <span class="number">0</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在上面这个例子中，本来的需求是输出<code>0, 1, ... 9</code>，但实际上输出的是<code>10, 10...10</code><br>因为<code>var</code>声明的变量没有块级作用域，循环体中访问的<code>i</code>是同一个变量。所有在循环做完后<code>i</code>的值便为<code>10</code>,然后输出。<br>要解决这个问题，可以将循环体做成一个闭包，然后将<code>i</code>传进去。 不过最简单的是将<br><code>var</code>替换为<code>let</code>，这样就会有块级作用域，也就是说每个循环体里的变量<code>i</code>都是单独的个体，</p>
+<ul>
+<li><p>声明提升<br><br><code>JavaScript</code>中的变量以及函数的声明会提升到当前作用域顶端（函数表达式不会<br>进行声明，这里不对函数的声明提升进行讨论）。<br><br></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(a);</span><br><span class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">console</span>.log(c);</span><br><span class="line"><span class="keyword">const</span> c = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p> 这里可以输出<code>a</code>，不过值时<code>undefined</code>，而输出<code>b</code>，<code>c</code>时却会报错，也就是说,<br> <code>var</code>会进行申明提升，而<code>let</code>,<code>const</code>不会进行提升。<br></p>
+<blockquote>
+<p>不过<a href="https://zhuanlan.zhihu.com/p/28140450" target="_blank" rel="noopener">我用了两个月的时间才理解 let</a><br>这篇文章对<code>let</code>是否有提升有不同的解释，网上关于<code>let</code>是否提升也有不同的说法，<br>可以作为参考</p>
+</blockquote>
+</li>
+<li><p>暂时性死区<br><br></p>
+<blockquote>
+<p>在 ECMAScript 2015 中，let 绑定不受变量提升的约束，这意味着 let  声明不会被提升到当前执行上下文的顶部。在块中的变量初始化之前，引用它将会导致 ReferenceError（而使用 var 声明变量则恰恰相反，该变量的值是 undefined ）。这个变量处于从块开始到 let 初始化处理的”暂存死区“之中。</p>
+</blockquote>
+<p>以上是<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/let" target="_blank" rel="noopener">MDN</a><br>关于<code>let</code>暂时性死区的介绍。简单来说就是：在作用域开始到<code>let</code>  <code>const</code><br>声明的这个区间会形成一个封闭的区域，而在这个区域内访问未声明的变量便会报错。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/03/21/关于var、let及const/" data-id="cjtis4ebh0000oscqordku9wo" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-React中的合成事件（SyntheticEvent）" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/03/19/React中的合成事件（SyntheticEvent）/" class="article-date">
@@ -107,7 +165,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/19/React中的合成事件（SyntheticEvent）/" data-id="cjtfycaqq00001kcqd68n4gci" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/19/React中的合成事件（SyntheticEvent）/" data-id="cjtis4ecd0002oscqktol99jd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
@@ -164,7 +222,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/18/关于React中的this/" data-id="cjtfycaqw00011kcq1105kn4e" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/18/关于React中的this/" data-id="cjtis4eca0001oscqo6xojdcc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
@@ -218,6 +276,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/03/21/关于var、let及const/">关于var、let及const</a>
+          </li>
         
           <li>
             <a href="/2019/03/19/React中的合成事件（SyntheticEvent）/">React中的合成事件（SyntheticEvent）</a>
