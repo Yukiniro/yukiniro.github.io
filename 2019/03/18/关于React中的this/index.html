@@ -1,235 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>关于React中的this | Yukiniro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="###组件中的this  在React组件内部很容易理解为访问的是组件实例，但是实际上却是不一定的。  12345678910class Button extends Component &amp;#123;  render() &amp;#123;      console.log(this);      return &amp;lt;button onClick=&amp;#123;this.handleClick&amp;#125">
-<meta name="keywords" content="React">
-<meta property="og:type" content="article">
-<meta property="og:title" content="关于React中的this">
-<meta property="og:url" content="http://yoursite.com/2019/03/18/关于React中的this/index.html">
-<meta property="og:site_name" content="Yukiniro">
-<meta property="og:description" content="###组件中的this  在React组件内部很容易理解为访问的是组件实例，但是实际上却是不一定的。  12345678910class Button extends Component &amp;#123;  render() &amp;#123;      console.log(this);      return &amp;lt;button onClick=&amp;#123;this.handleClick&amp;#125">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-19T14:11:13.853Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于React中的this">
-<meta name="twitter:description" content="###组件中的this  在React组件内部很容易理解为访问的是组件实例，但是实际上却是不一定的。  12345678910class Button extends Component &amp;#123;  render() &amp;#123;      console.log(this);      return &amp;lt;button onClick=&amp;#123;this.handleClick&amp;#125">
-  
-    <link rel="alternate" href="/atom.xml" title="Yukiniro" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
-
-</head>
-</html>
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Yukiniro</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">Study And Share</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-关于React中的this" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/18/关于React中的this/" class="article-date">
-  <time datetime="2019-03-18T13:55:35.000Z" itemprop="datePublished">2019-03-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      关于React中的this
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>###组件中的this<br>  在<code>React</code>组件内部很容易理解为访问的是组件实例，但是实际上却是不一定的。<br>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Button</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>);</span><br><span class="line">      <span class="keyword">return</span> &lt;button onClick=&#123;this.handleClick&#125;&gt;button&lt;/button&gt;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  handleClick () &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>  上述代码中会分别输出组件实例和undefined。<br><br>  因为在<code>JavaScript</code>中this的指向并不是在函数定义时决定的，而是在函数调用时决定的，<br>  同样的，<code>React</code>中也遵循了这种机制（不过<code>React</code>的生命周期函数中<code>this</code>为组件实例），<br>  所有在需要用到this的地方就需要绑定，一般有以下几种：</p>
-<ul>
-<li><p>createClass自动绑定</p>
-<p>使用<code>createClass</code>创建组件，这样会自动绑定将<code>this</code>指向组件实例，不过现在<br>创建组件一般是<code>class</code>组件或者<code>Function</code>组件，不推荐使用这种方法。</p>
-</li>
-<li><p>constructor中绑定</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.handleClick = <span class="keyword">this</span>.handleClick.bind(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>没有明显的副作用，但是麻烦，懒得写。</p>
-</li>
-<li><p>JSX中绑定</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;button onClick=&#123;<span class="keyword">this</span>.handleClick.bind(<span class="keyword">this</span>)&#125;&gt;button&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">&lt;button onClick=&#123;(e) =&gt; &#123;this.handleClick(e)&#125;&#125;&gt;button&lt;/</span>button&gt;</span><br></pre></td></tr></table></figure>
-<p>这两种方法会有效率问题，在每次渲染时创建新的函数进行传递，如果是原生标签问题不大，但如果是组件标签会造成此组件不必要<br>的渲染。</p>
-</li>
-<li><p>箭头函数</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">handleClick = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>箭头函数（上一个使用的也是）会在定义时在当前作用域中的<code>this</code>绑定到函数<br>中。所有箭头函数中访问的<code>this</code>是组件实例</p>
-</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/18/关于React中的this/" data-id="cjtis4eca0001oscqo6xojdcc" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2019/03/19/React中的合成事件（SyntheticEvent）/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          React中的合成事件（SyntheticEvent）
-        
-      </div>
-    </a>
-  
-  
-</nav>
-
-  
-</article>
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/React/" style="font-size: 10px;">React</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2019/03/21/关于var、let及const/">关于var、let及const</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/19/React中的合成事件（SyntheticEvent）/">React中的合成事件（SyntheticEvent）</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/18/关于React中的this/">关于React中的this</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2019 Yukiniro<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
-
-  </div>
-</body>
-</html>
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="viewport" content="width=device-width, initial-scale=1"><title>关于React中的this</title><link rel="shortcut icon" href="/images/avatar.png"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css"><script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script></head><body><nav class="main-nav"><a href="/">Home</a><a href="/archives">Archives</a></nav><div class="profile"><section id="wrapper"><header id="header"><a href="/about"><img class="2x" id="avatar" src="/images/avatar.png"></a><h1>Yukiniro</h1><h2></h2></header></section></div><section class="post" id="wrapper"><article><header><h1>关于React中的this</h1><h2 class="headline">Mar 18, 2019 9:55·443 words
+·1 minutes read<span class="tags"></span></h2></header><section id="post-body"><blockquote>
+<p><strong>组件中的<code>this</code></strong></p>
+</blockquote>
+<p>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在<code>React</code>组件内部很容易理解为访问的是组件实例，但是实际上却是不一定的。</p>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Button</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>);</span><br><span class="line">      <span class="keyword">return</span> &lt;button onClick=&#123;this.handleClick&#125;&gt;button&lt;/button&gt;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  handleClick () &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><p>  上述代码中会分别输出组件实例和undefined。<br><br>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;因为在<code>JavaScript</code>中this的指向并不是在函数定义时决定的，而是在函数调用时决定的，同样的，<code>React</code>中也遵循了这种机制（不过<code>React</code>的生命周期函数中<code>this</code>为组件实例），所有在需要用到this的地方就需要绑定，一般有以下几种：</p>
+<blockquote>
+<p><strong>createClass自动绑定</strong></p>
+</blockquote>
+<p>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用<code>createClass</code>创建组件，这样会自动绑定将<code>this</code>指向组件实例，不过现在<br>   创建组件一般是<code>class</code>组件或者<code>Function</code>组件，不推荐使用这种方法。</p>
+<blockquote>
+<p><strong>constructor中绑定</strong></p>
+</blockquote>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">constructor</span>(props) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props);</span><br><span class="line">    <span class="keyword">this</span>.handleClick = <span class="keyword">this</span>.handleClick.bind(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><p>   没有明显的副作用，但是麻烦，懒得写。</p>
+<blockquote>
+<p><strong>JSX中绑定</strong></p>
+</blockquote>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;button onClick=&#123;<span class="keyword">this</span>.handleClick.bind(<span class="keyword">this</span>)&#125;&gt;button&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">&lt;button onClick=&#123;(e) =&gt; &#123;this.handleClick(e)&#125;&#125;&gt;button&lt;/</span>button&gt;</span><br></pre></td></tr></table></figure>
+</code></pre><p>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这两种方法会有效率问题，在每次渲染时创建新的函数进行传递，如果是原生标签问题不大，但如果是组件标签会造成此组件不必要的渲染。</p>
+<blockquote>
+<p><strong>箭头函数</strong></p>
+</blockquote>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">handleClick = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><p>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箭头函数（上一个使用的也是）会在定义时在当前作用域中的<code>this</code>绑定到函数<br>   中。所有箭头函数中访问的<code>this</code>是组件实例</p>
+</section><nav id="post-nav"><span class="prev"><a href="/2019/03/19/React中的合成事件（SyntheticEvent）/"><span class="arrow">←</span>Newer Posts</a></span><span class="next"></span></nav></article></section><footer id="footer"><div id="social"><a class="symbol" href="https://github.com/Yukiniro"><i class="fa fa-github"></i></a></div><p class="small">© Copyright 2019 &nbsp;<i class="fa fa-heart" aria-hidden="true">&nbsp;Yukiniro</i></p><p class="small">Powered by &nbsp;<a href="https://hexo.io/">Hexo &nbsp;</a>Theme By &nbsp;<a href="https://github.com/fuzhouxxdong/hexo-theme-dxx">Dxx</a></p></footer><script>hljs.initHighlightingOnLoad();</script></body></html>
