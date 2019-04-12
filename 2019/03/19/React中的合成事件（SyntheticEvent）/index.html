@@ -4,7 +4,7 @@
 <blockquote>
 <p><strong>事件的异步访问</strong></p>
 </blockquote>
-<p>  <img src="../images/console1.PNG" alt><br>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上述代码在点击<code>button</code>后会有以上输出信息，之前说过，合成事件在异步访问时其属性都会失效，并且会弹出类型警告。如果确实需要在异步中作处理，可以调用<code>event.persist()</code>方法将此事件从池中移除，使用户代码保留对此事件对象的<br>引用。另外还可以在异步前将需要的事件属性保留下来然后在异步中使用。</p>
+<p>  <img src="../images/console1.png" alt><br>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上述代码在点击<code>button</code>后会有以上输出信息，之前说过，合成事件在异步访问时其属性都会失效，并且会弹出类型警告。如果确实需要在异步中作处理，可以调用<code>event.persist()</code>方法将此事件从池中移除，使用户代码保留对此事件对象的<br>引用。另外还可以在异步前将需要的事件属性保留下来然后在异步中使用。</p>
 <blockquote>
 <p><strong>原生事件</strong></p>
 </blockquote>
